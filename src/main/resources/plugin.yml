@@ -1,5 +1,5 @@
 name: AtlantisGenerators
 version: '${version}'
-main: dev.nours.atlantisgenerators.AtlantisGenerators
+main: dev.nours.atlantisgenerators.AtlantisGeneratorsPlugin
 api-version: '1.20'
 authors: [Nours86]
