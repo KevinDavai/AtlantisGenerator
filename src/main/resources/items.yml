@@ -1,2 +1,19 @@
-item-name: "TEST"
-item-lore: "sdfgsdgf"
+# File version (do NOT edit):
+file-version: 2
+
+#ok
+ok: "ok"
+
+#object
+Object:
+  apart: true
+  items: []
+
+#add comment here 2
+testttt: "dsgsdqg"
+
+#Item lore
+item-lore: "sddd"
+
+actual: true
+

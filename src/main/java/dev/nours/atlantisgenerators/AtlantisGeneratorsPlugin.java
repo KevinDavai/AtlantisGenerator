@@ -19,7 +19,7 @@ public final class AtlantisGeneratorsPlugin extends JavaPlugin implements Listen
     public void onPlayerJoin(PlayerJoinEvent e) {
         String itemName = configManager.getItemsConfig().getItemName();
         String itemLore = configManager.getItemsConfig().getItemLore();
-        e.getPlayer().sendMessage(itemName + "  dfg");
+        e.getPlayer().sendMessage(itemName + "  dfdsfg");
         e.getPlayer().sendMessage(itemLore);
     }
 }

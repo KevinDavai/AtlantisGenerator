@@ -10,6 +10,7 @@ public class ConfigManager {
     public ConfigManager(AtlantisGeneratorsPlugin plugin) {
         this.plugin = plugin;
         itemsConfig = new ItemsConfig(plugin);
+        plugin.getLogger().info(itemsConfig.getItemName());
     }
 
     public ItemsConfig getItemsConfig() {
