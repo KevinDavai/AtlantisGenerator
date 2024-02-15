@@ -29,6 +29,14 @@ public class ConfigBase {
         updateConfigIfNeeded();
     }
 
+    public void reloadFile() {
+        try {
+            config.reload();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void initializeConfig(String fileName) {
         try {
             config = YamlDocument.create(configFile, plugin.getResource(fileName),

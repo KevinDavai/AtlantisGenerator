@@ -4,7 +4,7 @@ import dev.nours.atlantisgenerators.AtlantisGeneratorsPlugin;
 import dev.nours.atlantisgenerators.configurations.ItemsConfig;
 
 public class ConfigManager {
-    private AtlantisGeneratorsPlugin plugin;
+    private final AtlantisGeneratorsPlugin plugin;
     private ItemsConfig itemsConfig;
 
     public ConfigManager(AtlantisGeneratorsPlugin plugin) {

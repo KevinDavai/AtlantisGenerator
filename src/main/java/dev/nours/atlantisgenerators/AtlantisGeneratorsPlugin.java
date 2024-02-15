@@ -1,6 +1,7 @@
 package dev.nours.atlantisgenerators;
 
 import dev.nours.atlantisgenerators.managers.ConfigManager;
+import dev.nours.atlantisgenerators.nms.NMS;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AtlantisGeneratorsPlugin extends JavaPlugin implements Listener {
     private ConfigManager configManager;
+    private NMS nms;
+
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
