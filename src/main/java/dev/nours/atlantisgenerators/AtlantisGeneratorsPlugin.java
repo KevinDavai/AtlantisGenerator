@@ -1,28 +1,23 @@
 package dev.nours.atlantisgenerators;
 
 import dev.nours.atlantisgenerators.managers.ConfigManager;
-import dev.nours.atlantisgenerators.nms.NMS;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import dev.nours.atlantisgenerators.nms.NMSAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class AtlantisGeneratorsPlugin extends JavaPlugin implements Listener {
+public final class AtlantisGeneratorsPlugin extends JavaPlugin {
     private ConfigManager configManager;
-    private NMS nms;
 
     @Override
     public void onEnable() {
-        configManager = new ConfigManager(this);
-        this.getServer().getPluginManager().registerEvents(this, this);
-    }
+        if (!NMSAdapter.isValidVersion()) {
+            this.getLogger().severe(String.format("AtlantisGenerators only supports %s through %s. The plugin has been disabled.", "1.16.5", "1.20.4"));
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        String itemName = configManager.getItemsConfig().getItemName();
-        String itemLore = configManager.getItemsConfig().getItemLore();
-        e.getPlayer().sendMessage(itemName + "  dfdsfg");
-        e.getPlayer().sendMessage(itemLore);
+        configManager = new ConfigManager(this);
+
+        NMSAdapter.getHandler().isInChunk();
     }
 }
