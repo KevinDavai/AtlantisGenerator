@@ -2,5 +2,5 @@ rootProject.name = 'AtlantisGenerators'
 
 include 'NMS:Wrapper'
 include 'NMS:v1_20_R2'
-
+include 'NMS:v1_20_R3'
 

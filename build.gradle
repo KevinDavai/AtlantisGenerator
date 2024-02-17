@@ -30,24 +30,30 @@ allprojects {
 
 }
 
-List<String> nmsVersions = Arrays.asList("v1_20_R2");
+List<String> nmsVersions = Arrays.asList("v1_20_R2", "v1_20_R3");
 dependencies {
-    paperweight.paperDevBundle("$spigotVersion-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
 
     implementation(project(":NMS:Wrapper"))
     implementation(project(":NMS:v1_20_R2"))
+    implementation(project(":NMS:v1_20_R3"))
 
 
     implementation 'dev.dejvokep:boosted-yaml-spigot:1.3'
 }
 
 shadowJar {
-    destinationDirectory.set(file("C:/Users/Kevin/Desktop/ATLANTIS/Developpement/SERVEUR/plugins"))
-
-    exclude("META-INF/**")
-
-    archiveFileName.set("AtlantisGenerators-${project.version}.jar")
     archiveClassifier.set(null)
 
     relocate 'dev.dejvokep.boostedyaml', 'dev.nours.atlantisgenerators.libs'
+}
+
+reobfJar {
+    // This is an example of how you might change the output location for reobfJar. It's recommended not to do this
+    // for a variety of reasons, however it's asked frequently enough that an example of how to do it is included here.
+    outputJar.set(file("C:/Users/Kevin/Desktop/ATLANTIS/Developpement/SERVEUR/plugins/AtlantisGenerators-${project.version}.jar"))
+}
+
+tasks.assemble {
+    dependsOn(reobfJar)
 }
