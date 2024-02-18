@@ -1,59 +1,68 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id("io.papermc.paperweight.userdev") version "1.5.11"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
+
+group = 'dev.nours'
 version = '1.0.0'
 
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'com.github.johnrengelman.shadow'
-
-    group = 'dev.nours'
-    version = '1.0.0'
-
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+repositories {
+    mavenCentral()
+    maven {
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
-
-    repositories {
-        mavenCentral()
-        maven {
-            name = "papermc-repo"
-            url = uri("https://repo.papermc.io/repository/maven-public/")
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/groups/public/"
-        }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
     }
-
 }
 
-List<String> nmsVersions = Arrays.asList("v1_20_R2", "v1_20_R3");
 dependencies {
-    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
-
-    implementation(project(":NMS:Wrapper"))
-    implementation(project(":NMS:v1_20_R2"))
-    implementation(project(":NMS:v1_20_R3"))
-
+    compileOnly "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT"
 
     implementation 'dev.dejvokep:boosted-yaml-spigot:1.3'
 }
 
-shadowJar {
-    archiveClassifier.set(null)
-
-    relocate 'dev.dejvokep.boostedyaml', 'dev.nours.atlantisgenerators.libs'
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
 }
 
-reobfJar {
-    // This is an example of how you might change the output location for reobfJar. It's recommended not to do this
-    // for a variety of reasons, however it's asked frequently enough that an example of how to do it is included here.
-    outputJar.set(file("C:/Users/Kevin/Desktop/ATLANTIS/Developpement/SERVEUR/plugins/AtlantisGenerators-${project.version}.jar"))
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
 }
 
-tasks.assemble {
-    dependsOn(reobfJar)
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+
+        shadowJar {
+            destinationDirectory.set(file("C:/Users/Kevin/Desktop/ATLANTIS/Developpement/SERVEUR/plugins"))
+            minimize()
+
+            exclude("META-INF/**")
+
+            archiveFileName.set("AtlantisBanks-${project.version}.jar")
+            archiveClassifier.set("shadow")
+
+            relocate 'dev.dejvokep.boostedyaml', 'me.plugin.libs'
+        }
+    }
 }
