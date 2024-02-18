@@ -10,7 +10,6 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
 import dev.dejvokep.boostedyaml.updater.operators.Merger;
 import dev.nours.atlantisgenerators.AtlantisGeneratorsPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -18,7 +17,7 @@ import java.util.*;
 public class ConfigBase {
 
     protected AtlantisGeneratorsPlugin plugin;
-    protected @NotNull File configFile;
+    protected File configFile;
     protected YamlDocument config;
 
     private String defaultVersion;

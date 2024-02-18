@@ -59,7 +59,7 @@ tasks {
 
             exclude("META-INF/**")
 
-            archiveFileName.set("AtlantisBanks-${project.version}.jar")
+            archiveFileName.set("AtlantisGenerators-${project.version}.jar")
             archiveClassifier.set("shadow")
 
             relocate 'dev.dejvokep.boostedyaml', 'me.plugin.libs'

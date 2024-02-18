@@ -1,16 +1,15 @@
 # File version (do NOT edit):
-file-version: 2
+file-version: 3
 
 #ok
-ok: "ok"
+test: 1
+#ok
 
 #object
 Object:
   apart: true
   items: []
 
-#add comment here 2
-testttt: "dsgsdqg"
 
 #Item lore
 item-lore: "sddd"
