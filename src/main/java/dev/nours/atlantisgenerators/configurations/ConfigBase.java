@@ -10,6 +10,7 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
 import dev.dejvokep.boostedyaml.updater.operators.Merger;
 import dev.nours.atlantisgenerators.AtlantisGeneratorsPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +18,7 @@ import java.util.*;
 public class ConfigBase {
 
     protected AtlantisGeneratorsPlugin plugin;
-    protected File configFile;
+    protected @NotNull File configFile;
     protected YamlDocument config;
 
     private String defaultVersion;
@@ -39,7 +40,7 @@ public class ConfigBase {
 
     private void initializeConfig(String fileName) {
         try {
-            config = YamlDocument.create(configFile, plugin.getResource(fileName),
+            config = YamlDocument.create(configFile, Objects.requireNonNull(plugin.getResource(fileName)),
                     GeneralSettings.builder().setSerializer(SpigotSerializer.getInstance()).setUseDefaults(true).build(),
                     LoaderSettings.builder().setAutoUpdate(false).build(),
                     DumperSettings.DEFAULT,
@@ -47,7 +48,7 @@ public class ConfigBase {
                             .setVersioning(new BasicVersioning("file-version"))
                             .build());
 
-            Version version = (Version) Objects.requireNonNull(config.getUpdaterSettings().getVersioning().getDocumentVersion(config.getDefaults(), true), "Version ID of the defaults cannot be null! Is it malformed or not specified?");
+            Version version = Objects.requireNonNull(config.getUpdaterSettings().getVersioning().getDocumentVersion(Objects.requireNonNull(config.getDefaults()), true), "Version ID of the defaults cannot be null! Is it malformed or not specified?");
             this.defaultVersion = version.asID();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -63,7 +64,7 @@ public class ConfigBase {
                 .addIgnoredRoute(this.defaultVersion, "Object.items", '.')
                 .build());
 
-        if (!documentVersion.asID().equals(this.defaultVersion)) {
+        if (documentVersion != null && !documentVersion.asID().equals(this.defaultVersion)) {
             performUpdate();
         } else {
             mergeAndSaveConfig();
@@ -90,7 +91,7 @@ public class ConfigBase {
 
     private YamlDocument getCurrentYamlDocument() {
         try {
-            return YamlDocument.create(config.getFile());
+            return YamlDocument.create(Objects.requireNonNull(config.getFile()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -108,13 +109,9 @@ public class ConfigBase {
 
     private void restoreMissingKeys() {
         plugin.getLogger().warning("Detect missing key, restoring them...");
-        config.getUpdaterSettings().getIgnoredRoutes(this.defaultVersion, config.getGeneralSettings().getRouteSeparator()).forEach((route) -> {
-            config.getOptionalBlock(route).ifPresent((block) -> {
-                block.setIgnored(true);
-            });
-        });
+        config.getUpdaterSettings().getIgnoredRoutes(this.defaultVersion, config.getGeneralSettings().getRouteSeparator()).forEach((route) -> config.getOptionalBlock(route).ifPresent((block) -> block.setIgnored(true)));
 
-        Merger.merge(config, config.getDefaults(), config.getUpdaterSettings());
+        Merger.merge(config, Objects.requireNonNull(config.getDefaults()), config.getUpdaterSettings());
         try {
             config.save();
         } catch (IOException e) {
