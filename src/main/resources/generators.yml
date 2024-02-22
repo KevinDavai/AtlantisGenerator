@@ -1,9 +1,9 @@
-items:
-  abeille:
-    material: YELLOW_WOOL
-    custom-model-data: 10001
-  poule:
+generators:
+  example1:
     material: WHITE_WOOL
+    custom-model-data: 10001
+  example2:
+    material: PAPER
     custom-model-data: 10001
 
 

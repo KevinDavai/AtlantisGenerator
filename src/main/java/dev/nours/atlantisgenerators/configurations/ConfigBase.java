@@ -10,6 +10,7 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import dev.dejvokep.boostedyaml.spigot.SpigotSerializer;
 import dev.dejvokep.boostedyaml.updater.operators.Merger;
 import dev.nours.atlantisgenerators.AtlantisGeneratorsPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -19,12 +20,14 @@ public class ConfigBase {
     protected AtlantisGeneratorsPlugin plugin;
     protected File configFile;
     protected YamlDocument config;
-
     private String defaultVersion;
+    private String ignoredRoute;
 
-    public ConfigBase(AtlantisGeneratorsPlugin plugin, String fileName) {
+    public ConfigBase(AtlantisGeneratorsPlugin plugin, @NotNull String fileName, String ignoredRoute) {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), fileName);
+        this.ignoredRoute = ignoredRoute;
+
         initializeConfig(fileName);
         updateConfigIfNeeded();
     }
@@ -40,7 +43,7 @@ public class ConfigBase {
     private void initializeConfig(String fileName) {
         try {
             config = YamlDocument.create(configFile, Objects.requireNonNull(plugin.getResource(fileName)),
-                    GeneralSettings.builder().setSerializer(SpigotSerializer.getInstance()).setUseDefaults(true).build(),
+                    GeneralSettings.builder().setSerializer(SpigotSerializer.getInstance()).setUseDefaults(false).build(),
                     LoaderSettings.builder().setAutoUpdate(false).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder()
@@ -60,7 +63,7 @@ public class ConfigBase {
 
         config.setUpdaterSettings(UpdaterSettings.builder()
                 .setVersioning(actual.getVersioning())
-                .addIgnoredRoute(this.defaultVersion, "Object.items", '.')
+                .addIgnoredRoute(this.defaultVersion, ignoredRoute, '.')
                 .build());
 
         if (documentVersion != null && !documentVersion.asID().equals(this.defaultVersion)) {
